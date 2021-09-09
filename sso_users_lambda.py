@@ -110,9 +110,11 @@ def lambda_handler(event, context):
     member_id = response.json().get('id')
     group     = update_group(member_id)
 
-    pretty_json = json.dumps(response.json(), indent=4)
-    #print(response.status_code)
-    print(pretty_json)
+    pretty = json.loads(response.text)
+    status = {"STATUS": response.status_code}
+    pretty.update(status)
+    
+    print(json.dumps(pretty, indent = 4))
 
     return
 
