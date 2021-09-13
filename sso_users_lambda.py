@@ -64,12 +64,12 @@ def create_user(user_name, family_name, given_name, display_name, work_email):
     return response
 
 
-def update_group(member_id):
+def update_group(member_id, group_id):
     """
     PATCH /Groups
     """
 
-    group_id = '9267707bc4-f5402b43-4ea7-49d5-9463-66a6f5f02c69'
+    #group_id = '9267707bc4-f5402b43-4ea7-49d5-9463-66a6f5f02c69'
     scim_url = scim_group_url + '/' + group_id
     data = {
              'schemas': [
@@ -103,12 +103,13 @@ def lambda_handler(event, context):
     given_name   = event['givenName']
     display_name = event['displayName']
     work_email   = event['email']
+    group_id     = event['groupId']
    
     response = create_user(user_name, family_name, given_name, display_name, work_email)
 
     # Add new user to our existing group
     member_id = response.json().get('id')
-    group     = update_group(member_id)
+    group     = update_group(member_id, group_id)
 
     pretty = json.loads(response.text)
     status = {"STATUS": response.status_code}
